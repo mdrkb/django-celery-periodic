@@ -1,5 +1,5 @@
 # mycelery
-Django asynchronous task example using Celery and RabbitMQ.
+Django periodic task example using Celery and RabbitMQ.
 
 ## Getting Started
 
@@ -10,8 +10,8 @@ Django asynchronous task example using Celery and RabbitMQ.
 
 ### Installing
 ```
-git clone https://github.com/mdrkb/django-celery.git
-cd django-celery
+git clone https://github.com/mdrkb/django-celery-periodic.git
+cd django-celery-periodic
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -24,11 +24,9 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-### Running RabbitMQ Worker
+### Running RabbitMQ Worker and Beat
 Open another terminal. Navigate inside ```../mycelery/mycelery/``` by activating virutal environment. Then run the following command:
 ```
-celery -A mycelery worker -l info
+celery -A mycelery worker -l info -B
 ```
-
-Open browser and go to <http://127.0.0.1:8000/generate-user/>. Give input for number of users and the task will be performed asynchronously.
 

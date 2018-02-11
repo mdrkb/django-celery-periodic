@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +25,7 @@ SECRET_KEY = 'gchvizw3e#n_&v=0#6u=ji#=g-_^__z9!p_e@2%5!c@_=nj&!f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -35,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_celery_results',
     'myapp',
 ]
 
@@ -115,8 +115,21 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-BROKER_URL = 'amqp://rakib:123456@localhost:5672/rakibhost'
+CELERY_BROKER_URL = 'amqp://rakib:123456@localhost:5672/rakibhost'
+CELERY_RESULT_BACKEND = 'amqp://rakib:123456@localhost:5672/rakibhost'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = 'Asia/Dhaka'
+CELERY_BEAT_SCHEDULE = {
+    'task-add': {
+        'task': 'myapp.tasks.add',
+        'schedule': 15,
+        'args': (4, 5)
+    },
+    'task-mul': {
+        'task': 'myapp.tasks.mul',
+        'schedule': crontab(minute='*/2'),
+        'args': (4, 5)
+    },
+}
